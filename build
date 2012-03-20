@@ -1,0 +1,2 @@
+#!/bin/sh
+neatjs --source-dir source --dest-dir compiled

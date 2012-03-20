@@ -1,0 +1,23 @@
+#declare require, module, Date;
+
+var fs = require('fs');
+
+var statsCache = {};
+
+module.exports = (path, next) {
+	if (statsCache[path] && statsCache[path].expires > new Date().getTime()) {
+		next(null, statsCache[path].stats);
+		return;
+	}
+	
+	fs.stat(path, onStats);
+	
+	onStats(%next, stats) {
+		statsCache[path] = {
+			stats: stats,
+			expires: (new Date().getTime() + 1500),
+		};
+		
+		next(null, stats);
+	}
+};
